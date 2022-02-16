@@ -87,15 +87,45 @@ public class Tasks {
         if (a.size() == d) return a;
         Integer[] res = new Integer[a.size()];
         for (int i = 0; i < a.size(); i++) {
-            res[i - d < 0 ? a.size() + (i - d) : i - d] =  a.get(i);
+            res[i - d < 0 ? a.size() + (i - d) : i - d] = a.get(i);
         }
         return new ArrayList<>(List.of(res));
     }
 
+    public static void minimumBribes(List<Integer> q) {
+        int result = 0;
+        Integer[] test = new Integer[q.size()];
+        for (int i = 0; i < q.size(); i++) {
+            test[i] = i + 1;
+        }
+        for (int i = 0; i < q.size(); i++) {
+            if ((int)  test[i] != (int) q.get(i)) {
+                int j = i + 1;
+                while ((int) q.get(i) != (int) test[j]) {
+                    j++;
+                    if (j - i > 2) {
+                        break;
+                    }
+                }
+                if (j - i > 2) {
+                    System.out.println("Too chaotic");
+                    result = -1;
+                    break;
+                }
+                int temp = q.get(i);
+                System.arraycopy(test, i, test, i + 1, j - i);
+                test[i] = temp;
+                result += j - i;
+            }
+        }
+        if (result != -1) System.out.println(result);
+    }
+
+
     public static void main(String[] args) throws IOException {
         //clouds
-        Integer[] t = {0, 0, 1, 0, 0, 1, 0};
-        List<Integer> c = new ArrayList<>(List.of(t));
+        Integer[] t1 = {0, 0, 1, 0, 0, 1, 0};
+        List<Integer> c = new ArrayList<>(List.of(t1));
         System.out.println(jumpingOnClouds(c));
         //valleys
         System.out.println(countingValleys(8, "UDDDUDUU"));
@@ -103,18 +133,25 @@ public class Tasks {
         System.out.println(repeatedString("a", 1000000000000L));
         //hourglassSum
         //rotLeft
+        //minimumBribes
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+        int t = Integer.parseInt(bufferedReader.readLine().trim());
 
-        int n = Integer.parseInt(firstMultipleInput[0]);
+        IntStream.range(0, t).forEach(tItr -> {
+            try {
+                int n = Integer.parseInt(bufferedReader.readLine().trim());
 
-        int d = Integer.parseInt(firstMultipleInput[1]);
+                List<Integer> q = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                        .map(Integer::parseInt)
+                        .collect(toList());
 
-        List<Integer> a = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-                .map(Integer::parseInt)
-                .collect(toList());
-        System.out.println(rotLeft(a, d));
+                minimumBribes(q);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
         bufferedReader.close();
     }
 }
