@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -15,6 +16,24 @@ import static java.util.stream.Collectors.toList;
 
 
 public class Tasks {
+    public static int minimumSwaps(int[] arr) {
+        int swaps = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (i + 1 != arr[i]) {
+                for (int j = i + 1; j < arr.length; j++) {
+                    if(i + 1 == arr[j]){
+                        int temp = arr[j];
+                        arr[j] = arr[i];
+                        arr[i] = temp;
+                        swaps++;
+                        break;
+                    }
+                }
+            }
+        }
+        return swaps;
+    }
+
     public static int jumpingOnClouds(List<Integer> c) {
         int size = c.size();
         int result = 0;
@@ -99,7 +118,7 @@ public class Tasks {
             test[i] = i + 1;
         }
         for (int i = 0; i < q.size(); i++) {
-            if ((int)  test[i] != (int) q.get(i)) {
+            if ((int) test[i] != (int) q.get(i)) {
                 int j = i + 1;
                 while ((int) q.get(i) != (int) test[j]) {
                     j++;
@@ -123,6 +142,7 @@ public class Tasks {
 
 
     public static void main(String[] args) throws IOException {
+        /*
         //clouds
         Integer[] t1 = {0, 0, 1, 0, 0, 1, 0};
         List<Integer> c = new ArrayList<>(List.of(t1));
@@ -151,7 +171,23 @@ public class Tasks {
                 throw new RuntimeException(ex);
             }
         });
-
         bufferedReader.close();
+
+        */
+        //minimumSwaps
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        int[] arr = new int[n];
+
+        String[] arrItems = scanner.nextLine().split(" ");
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        for (int i = 0; i < n; i++) {
+            int arrItem = Integer.parseInt(arrItems[i]);
+            arr[i] = arrItem;
+        }
+        int res = minimumSwaps(arr);
     }
 }
