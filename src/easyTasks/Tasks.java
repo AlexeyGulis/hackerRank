@@ -16,12 +16,34 @@ import static java.util.stream.Collectors.toList;
 
 
 public class Tasks {
+
+    public static long arrayManipulation(int n, List<List<Integer>> queries) {
+        // Write your code here
+        long[] indexArray = new long[n];
+        long result = 0L;
+        for (int i = 0; i < queries.size(); i++) {
+            int a = queries.get(i).get(0);
+            int b = queries.get(i).get(1);
+            int k = queries.get(i).get(2);
+            indexArray[a - 1] += k;
+            if (b < n) {
+                indexArray[b] -= k;
+            }
+        }
+        long max = 0L;
+        for (int i = 0; i < indexArray.length; i++) {
+            max += indexArray[i];
+            if(result < max) result = max;
+        }
+        return result;
+    }
+
     public static int minimumSwaps(int[] arr) {
         int swaps = 0;
         for (int i = 0; i < arr.length; i++) {
             if (i + 1 != arr[i]) {
                 for (int j = i + 1; j < arr.length; j++) {
-                    if(i + 1 == arr[j]){
+                    if (i + 1 == arr[j]) {
                         int temp = arr[j];
                         arr[j] = arr[i];
                         arr[i] = temp;
@@ -142,52 +164,30 @@ public class Tasks {
 
 
     public static void main(String[] args) throws IOException {
-        /*
-        //clouds
-        Integer[] t1 = {0, 0, 1, 0, 0, 1, 0};
-        List<Integer> c = new ArrayList<>(List.of(t1));
-        System.out.println(jumpingOnClouds(c));
-        //valleys
-        System.out.println(countingValleys(8, "UDDDUDUU"));
-        //repeated Strings
-        System.out.println(repeatedString("a", 1000000000000L));
-        //hourglassSum
-        //rotLeft
-        //minimumBribes
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        int t = Integer.parseInt(bufferedReader.readLine().trim());
+        String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
 
-        IntStream.range(0, t).forEach(tItr -> {
+        int n = Integer.parseInt(firstMultipleInput[0]);
+
+        int m = Integer.parseInt(firstMultipleInput[1]);
+
+        List<List<Integer>> queries = new ArrayList<>();
+
+        IntStream.range(0, m).forEach(i -> {
             try {
-                int n = Integer.parseInt(bufferedReader.readLine().trim());
-
-                List<Integer> q = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-                        .map(Integer::parseInt)
-                        .collect(toList());
-
-                minimumBribes(q);
+                queries.add(
+                        Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                                .map(Integer::parseInt)
+                                .collect(toList())
+                );
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
+
+        long result = arrayManipulation(n, queries);
+
         bufferedReader.close();
-
-        */
-        //minimumSwaps
-        Scanner scanner = new Scanner(System.in);
-        int n = scanner.nextInt();
-        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
-
-        int[] arr = new int[n];
-
-        String[] arrItems = scanner.nextLine().split(" ");
-        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
-
-        for (int i = 0; i < n; i++) {
-            int arrItem = Integer.parseInt(arrItems[i]);
-            arr[i] = arrItem;
-        }
-        int res = minimumSwaps(arr);
     }
 }
