@@ -45,7 +45,20 @@ public class Tasks {
 
     public static String twoStrings(String s1, String s2) {
         // Write your code here
-        return "";
+        if (s1.length() > s2.length()) {
+            return letterOfString(s2, s1);
+        } else return letterOfString(s1, s2);
+    }
+
+    private static String letterOfString(String s, String p) {
+        HashSet<Character> letters = new HashSet<>();
+        for (int i = 0; i < s.length(); i++) {
+            letters.add(s.charAt(i));
+        }
+        for (int i = 0; i < p.length(); i++) {
+            if (letters.contains(p.charAt(i))){return "YES";}
+        }
+        return "NO";
     }
 
     public static void main(String[] args) throws IOException {
