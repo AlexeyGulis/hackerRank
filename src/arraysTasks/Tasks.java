@@ -29,7 +29,7 @@ public class Tasks {
         long max = 0L;
         for (int i = 0; i < indexArray.length; i++) {
             max += indexArray[i];
-            if(result < max) result = max;
+            if (result < max) result = max;
         }
         return result;
     }
