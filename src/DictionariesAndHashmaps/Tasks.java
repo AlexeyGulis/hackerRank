@@ -1,5 +1,7 @@
 package DictionariesAndHashmaps;
 
+import edu.princeton.cs.algs4.In;
+
 import java.io.*;
 import java.math.*;
 import java.security.*;
@@ -56,9 +58,47 @@ public class Tasks {
             letters.add(s.charAt(i));
         }
         for (int i = 0; i < p.length(); i++) {
-            if (letters.contains(p.charAt(i))){return "YES";}
+            if (letters.contains(p.charAt(i))) {
+                return "YES";
+            }
         }
         return "NO";
+    }
+
+    public static int sherlockAndAnagrams(String s) {
+        // Write your code here
+        int result = 0;
+        for (int i = 1; i < s.length(); i++) {
+            for (int j = 0; j <= s.length() - i; j++) {
+                for (int k = j + 1; k <= s.length() - i; k++) {
+                    result += anagrams(s.substring(j, j + i), s.substring(k, k + i));
+                }
+            }
+        }
+        return result;
+    }
+
+    private static int anagrams(String s, String p) {
+        HashMap<Character, Integer> hashMap = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            if (hashMap.containsKey(s.charAt(i))) {
+                hashMap.put(s.charAt(i), hashMap.get(s.charAt(i)) + 1);
+            } else {
+                hashMap.put(s.charAt(i), 1);
+            }
+        }
+        for (int i = 0; i < p.length(); i++) {
+            if (hashMap.containsKey(p.charAt(i))) {
+                if (hashMap.get(p.charAt(i)) == 0) {
+                    return 0;
+                } else {
+                    hashMap.put(p.charAt(i), hashMap.get(p.charAt(i)) - 1);
+                }
+            } else {
+                return 0;
+            }
+        }
+        return 1;
     }
 
     public static void main(String[] args) throws IOException {
@@ -68,11 +108,10 @@ public class Tasks {
 
         IntStream.range(0, q).forEach(qItr -> {
             try {
-                String s1 = bufferedReader.readLine();
+                String s = bufferedReader.readLine();
 
-                String s2 = bufferedReader.readLine();
+                int result = sherlockAndAnagrams(s);
 
-                String result = twoStrings(s1, s2);
                 System.out.println(result);
 
             } catch (IOException ex) {
