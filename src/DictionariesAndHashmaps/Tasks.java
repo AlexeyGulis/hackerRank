@@ -12,41 +12,35 @@ import java.util.function.*;
 import java.util.regex.*;
 import java.util.stream.*;
 
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 public class Tasks {
 
-    public static long countTriplets(List<Long> arr, long r){
+    public static long countTriplets(List<Long> arr, long r) {
         long result = 0L;
-        int i = 0;
-        int j = 0;
-        int k = 0;
-        Collections.sort(arr);
-        for (i = 0; i < arr.size(); i++) {
-            j = Collections.binarySearch(arr,arr.get(i) * r);
-            if(j > 0){
-                k = Collections.binarySearch(arr, arr.get(j) * r);
-                if(k > 0){
-                    result++;
-                    int temp = j;
-                    while(temp + 1 < arr.size() && arr.get(++temp) == arr.get(j)){
-                        result++;
-                    }
-                    temp = j;
-                    while(temp - 1 >= 0 && arr.get(--temp) == arr.get(j)){
-                        result++;
-                    }
-                    temp = k;
-                    while(temp + 1 < arr.size() && arr.get(++temp) == arr.get(k)){
-                        result++;
-                    }
-                    temp = k;
-                    while(temp - 1 >= 0 && arr.get(--temp) == arr.get(k)){
-                        result++;
-                    }
-                }
+        HashMap<Long, Integer> counts = new HashMap<>();
+        for (Long t : arr
+        ) {
+            if (counts.containsKey(t)) {
+                counts.put(t, counts.get(t) + 1);
+            } else {
+                counts.put(t, 1);
             }
+        }
+        for (Long t : arr
+        ) {
+            if (r == 1) {
+                if (counts.containsKey(t * r) && counts.containsKey(t * r * r)) {
+                    result += 1 * counts.get(t * r) * counts.get(t * r * r);
+                }
+                counts.put(t, counts.get(t) - 1);
+            } else {
+                int count1 = 1;
+                int count2 = counts.get(t * r) - 1;
+                int count3 = count2 - 1;
+                result = count1 * count2 * count3;
+            }
+
         }
         return result;
     }
