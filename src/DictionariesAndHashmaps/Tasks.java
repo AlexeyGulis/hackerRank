@@ -29,20 +29,26 @@ public class Tasks {
         }
         for (Long t : arr
         ) {
-            if (r == 1) {
+            if (r != 1) {
+                counts.put(t, counts.get(t) - 1);
                 if (counts.containsKey(t * r) && counts.containsKey(t * r * r)) {
                     result += 1 * counts.get(t * r) * counts.get(t * r * r);
                 }
-                counts.put(t, counts.get(t) - 1);
             } else {
-                int count1 = 1;
-                int count2 = counts.get(t * r) - 1;
-                int count3 = count2 - 1;
-                result = count1 * count2 * count3;
+                counts.put(t, counts.get(t) - 1);
+                long tempResult = (long) counts.get(t) * (long) (counts.get(t) - 1) / 2;
+                result += tempResult;
             }
 
         }
         return result;
+    }
+
+    private static int factorial(int n) {
+        if (n == 0)
+            return 1;
+        else
+            return (n * factorial(n - 1));
     }
 
     public static void checkMagazine(List<String> magazine, List<String> note) {
