@@ -16,6 +16,41 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 public class Tasks {
+
+    public static long countTriplets(List<Long> arr, long r){
+        long result = 0L;
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        Collections.sort(arr);
+        for (i = 0; i < arr.size(); i++) {
+            j = Collections.binarySearch(arr,arr.get(i) * r);
+            if(j > 0){
+                k = Collections.binarySearch(arr, arr.get(j) * r);
+                if(k > 0){
+                    result++;
+                    int temp = j;
+                    while(temp + 1 < arr.size() && arr.get(++temp) == arr.get(j)){
+                        result++;
+                    }
+                    temp = j;
+                    while(temp - 1 >= 0 && arr.get(--temp) == arr.get(j)){
+                        result++;
+                    }
+                    temp = k;
+                    while(temp + 1 < arr.size() && arr.get(++temp) == arr.get(k)){
+                        result++;
+                    }
+                    temp = k;
+                    while(temp - 1 >= 0 && arr.get(--temp) == arr.get(k)){
+                        result++;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     public static void checkMagazine(List<String> magazine, List<String> note) {
         // Write your code here
         Hashtable<String, Integer> hashtable = new Hashtable<>();
@@ -104,21 +139,18 @@ public class Tasks {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        int q = Integer.parseInt(bufferedReader.readLine().trim());
+        String[] nr = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
 
-        IntStream.range(0, q).forEach(qItr -> {
-            try {
-                String s = bufferedReader.readLine();
+        int n = Integer.parseInt(nr[0]);
 
-                int result = sherlockAndAnagrams(s);
+        long r = Long.parseLong(nr[1]);
 
-                System.out.println(result);
+        List<Long> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                .map(Long::parseLong)
+                .collect(toList());
 
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
+        long ans = countTriplets(arr, r);
+        System.out.println(ans);
         bufferedReader.close();
     }
 }
