@@ -16,6 +16,10 @@ import static java.util.stream.Collectors.*;
 
 public class Tasks {
 
+    public static List<Integer> freqQuery(List<List<Integer>> queries) {
+        return null;
+    }
+
     public static long countTriplets(List<Long> arr, long r) {
         long result = 0L;
         HashMap<Long, Long> rightMap = new HashMap<>();
@@ -149,15 +153,23 @@ public class Tasks {
 
         String[] nr = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
 
-        int n = Integer.parseInt(nr[0]);
+        int q = Integer.parseInt(bufferedReader.readLine().trim());
 
-        long r = Long.parseLong(nr[1]);
+        List<List<Integer>> queries = new ArrayList<>();
 
-        List<Long> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-                .map(Long::parseLong)
-                .collect(toList());
+        IntStream.range(0, q).forEach(i -> {
+            try {
+                queries.add(
+                        Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                                .map(Integer::parseInt)
+                                .collect(toList())
+                );
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
-        long ans = countTriplets(arr, r);
+        List<Integer> ans = freqQuery(queries);
         System.out.println(ans);
         bufferedReader.close();
     }
