@@ -18,27 +18,42 @@ public class Tasks {
 
     public static long countTriplets(List<Long> arr, long r) {
         long result = 0L;
-        HashMap<Long, Integer> counts = new HashMap<>();
+        HashMap<Long, Long> rightMap = new HashMap<>();
+        HashMap<Long, Long> leftMap = new HashMap<>();
         for (Long t : arr
         ) {
-            if (counts.containsKey(t)) {
-                counts.put(t, counts.get(t) + 1);
+            if (rightMap.containsKey(t)) {
+                rightMap.put(t, rightMap.get(t) + 1L);
             } else {
-                counts.put(t, 1);
+                rightMap.put(t, 1L);
             }
         }
         for (Long t : arr
         ) {
-            if (r != 1) {
-                counts.put(t, counts.get(t) - 1);
-                if (counts.containsKey(t * r) && counts.containsKey(t * r * r)) {
-                    result += 1 * counts.get(t * r) * counts.get(t * r * r);
-                }
-            } else {
-                counts.put(t, counts.get(t) - 1);
-                long tempResult = (long) counts.get(t) * (long) (counts.get(t) - 1) / 2;
-                result += tempResult;
+            long leftCount = 0;
+            long rightCount = 0;
+            long rElem = t * r;
+            long lElem = 0;
+            if (t % r == 0) {
+                lElem = t / r;
             }
+
+            rightMap.put(t, rightMap.get(t) - 1L);
+
+            if (rightMap.containsKey(rElem)) {
+                rightCount = rightMap.get(rElem);
+            }
+            if (leftMap.containsKey(lElem)) {
+                leftCount = leftMap.get(lElem);
+            }
+            result += rightCount * leftCount;
+
+            if (leftMap.containsKey(t)) {
+                leftMap.put(t, leftMap.get(t) + 1L);
+            } else {
+                leftMap.put(t, 1L);
+            }
+
 
         }
         return result;
