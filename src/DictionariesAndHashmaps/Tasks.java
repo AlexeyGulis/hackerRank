@@ -16,8 +16,56 @@ import static java.util.stream.Collectors.*;
 
 public class Tasks {
 
-    public static List<Integer> freqQuery(List<List<Integer>> queries) {
-        return null;
+    public static List<Integer> freqQuery(List<int[]> queries) {
+        HashMap<Integer, Integer> q = new HashMap<>();
+        HashMap<Integer, HashSet<Integer>> freqNumb = new HashMap<>();
+        List<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < queries.size(); i++) {
+            switch (queries.get(i)[0]) {
+                case 1: {
+                    if (q.containsKey(queries.get(i)[1])) {
+                        freqNumb.get(q.get(queries.get(i)[1])).remove(queries.get(i)[1]);
+                        q.put(queries.get(i)[1], q.get(queries.get(i)[1]) + 1);
+                        if (!freqNumb.containsKey(q.get(queries.get(i)[1]))) {
+                            freqNumb.put(q.get(queries.get(i)[1]), new HashSet<>());
+                        }
+                        freqNumb.get(q.get(queries.get(i)[1])).add(queries.get(i)[1]);
+                    } else {
+                        q.put(queries.get(i)[1], 1);
+                        if (!freqNumb.containsKey(1)) {
+                            freqNumb.put(1, new HashSet<>());
+                        }
+                        freqNumb.get(1).add(queries.get(i)[1]);
+                    }
+                    break;
+                }
+                case 2: {
+                    if (q.containsKey(queries.get(i)[1])) {
+                        freqNumb.get(q.get(queries.get(i)[1])).remove(queries.get(i)[1]);
+                        q.put(queries.get(i)[1], q.get(queries.get(i)[1]) - 1);
+                        if (!freqNumb.containsKey(q.get(queries.get(i)[1]))) {
+                            freqNumb.put(q.get(queries.get(i)[1]), new HashSet<>());
+                        }
+                        freqNumb.get(q.get(queries.get(i)[1])).add(queries.get(i)[1]);
+                        if (q.get(queries.get(i)[1]) == 0) {
+                            q.remove(queries.get(i)[1]);
+                        }
+                    }
+                    break;
+                }
+                case 3: {
+                    if (freqNumb.containsKey(queries.get(i)[1]) && freqNumb.get(queries.get(i)[1]).size() != 0) {
+                        System.out.println("1");
+                        ans.add(1);
+                    } else {
+                        System.out.println("0");
+                        ans.add(0);
+                    }
+                    break;
+                }
+            }
+        }
+        return ans;
     }
 
     public static long countTriplets(List<Long> arr, long r) {
@@ -149,28 +197,21 @@ public class Tasks {
     }
 
     public static void main(String[] args) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-
-        String[] nr = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
-
-        int q = Integer.parseInt(bufferedReader.readLine().trim());
-
-        List<List<Integer>> queries = new ArrayList<>();
-
-        IntStream.range(0, q).forEach(i -> {
-            try {
-                queries.add(
-                        Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-                                .map(Integer::parseInt)
-                                .collect(toList())
-                );
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))) {
+            int q = Integer.parseInt(bufferedReader.readLine().trim());
+            List<int[]> queries = new ArrayList<>(q);
+            Pattern p = Pattern.compile("^(\\d+)\\s+(\\d+)\\s*$");
+            for (int i = 0; i < q; i++) {
+                int[] query = new int[2];
+                Matcher m = p.matcher(bufferedReader.readLine());
+                if (m.matches()) {
+                    query[0] = Integer.parseInt(m.group(1));
+                    query[1] = Integer.parseInt(m.group(2));
+                    queries.add(query);
+                }
             }
-        });
-
-        List<Integer> ans = freqQuery(queries);
-        System.out.println(ans);
-        bufferedReader.close();
+            List<Integer> ans = freqQuery(queries);
+            System.out.println(ans);
+        }
     }
 }
