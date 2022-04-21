@@ -74,22 +74,54 @@ class Result {
 }
 
 public class Solution {
+    private static class Player{
+        private String name;
+        private int score;
+
+        public Player(String name, int score){
+            this.name = name;
+            this.score = score;
+        }
+
+        @Override
+        public String toString() {
+            final StringBuffer sb = new StringBuffer();
+            sb.append(name);
+            sb.append(" ").append(score);
+            return sb.toString();
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getScore() {
+            return score;
+        }
+    }
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        String s = bufferedReader.readLine();
+        int n = Integer.parseInt(s);
+        Player [] players = new Player[n];
+        for (int i = 0; i < n; i++) {
+            String[] t = bufferedReader.readLine().split(" ");
+            players[i] = new Player(t[0],Integer.parseInt(t[1]));
+        }
+        Arrays.sort(players, new Comparator<Player>() {
 
-        String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
-
-        int n = Integer.parseInt(firstMultipleInput[0]);
-
-        int k = Integer.parseInt(firstMultipleInput[1]);
-
-        List<Integer> prices = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-                .map(Integer::parseInt)
-                .collect(toList());
-
-        int result = Result.maximumToys(prices, k);
-        System.out.println(result);
-
+            public int compare(Player o1, Player o2) {
+                if(o1.getScore() > o2.getScore()) return -1;
+                if(o1.getScore() < o2.getScore()) return 1;
+                if(o1.getScore() == o2.getScore()){
+                    return o1.getName().compareTo(o2.getName());
+                }
+                return 0;
+            }
+        });
+        for (int i = 0; i < n; i++) {
+            System.out.println(players[i]);
+        }
         bufferedReader.close();
     }
 }
