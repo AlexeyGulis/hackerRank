@@ -1,5 +1,7 @@
 package SortTasks;
 
+import edu.princeton.cs.algs4.In;
+
 import java.io.*;
 import java.math.*;
 import java.security.*;
@@ -71,57 +73,53 @@ class Result {
         return result;
     }
 
+    public static int activityNotifications(List<Integer> expenditure, int d){
+        int result = 0;
+        LinkedList<Integer> temp = new LinkedList<>();
+        for (Integer p : expenditure
+             ) {
+            if(temp.size() == d){
+                List<Integer> temp1 = new ArrayList<>(temp);
+                temp1.sort(new Comparator<Integer>() {
+                    @Override
+                    public int compare(Integer o1, Integer o2) {
+                        if(o1 > o2) return 1;
+                        if(o1 < o2) return -1;
+                        return 0;
+                    }
+                });
+                if(d % 2 == 0){
+                    double u = (temp1.get((temp1.size() / 2)) + temp1.get((temp1.size() / 2) + 1)) / 2;
+                    if(2 * u <= p) result++;
+                }else{
+                    if(p >= 2 * temp1.get(temp1.size()/2)) result++;
+                }
+                temp.removeFirst();
+            }
+            temp.addLast(p);
+        }
+        return result;
+    }
+
 }
 
 public class Solution {
-    private static class Player{
-        private String name;
-        private int score;
 
-        public Player(String name, int score){
-            this.name = name;
-            this.score = score;
-        }
-
-        @Override
-        public String toString() {
-            final StringBuffer sb = new StringBuffer();
-            sb.append(name);
-            sb.append(" ").append(score);
-            return sb.toString();
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public int getScore() {
-            return score;
-        }
-    }
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        String s = bufferedReader.readLine();
-        int n = Integer.parseInt(s);
-        Player [] players = new Player[n];
-        for (int i = 0; i < n; i++) {
-            String[] t = bufferedReader.readLine().split(" ");
-            players[i] = new Player(t[0],Integer.parseInt(t[1]));
-        }
-        Arrays.sort(players, new Comparator<Player>() {
 
-            public int compare(Player o1, Player o2) {
-                if(o1.getScore() > o2.getScore()) return -1;
-                if(o1.getScore() < o2.getScore()) return 1;
-                if(o1.getScore() == o2.getScore()){
-                    return o1.getName().compareTo(o2.getName());
-                }
-                return 0;
-            }
-        });
-        for (int i = 0; i < n; i++) {
-            System.out.println(players[i]);
-        }
+        String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+
+        int n = Integer.parseInt(firstMultipleInput[0]);
+
+        int d = Integer.parseInt(firstMultipleInput[1]);
+
+        List<Integer> expenditure = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                .map(Integer::parseInt)
+                .collect(toList());
+
+        int result = Result.activityNotifications(expenditure, d);
+        System.out.println(result);
         bufferedReader.close();
     }
 }
