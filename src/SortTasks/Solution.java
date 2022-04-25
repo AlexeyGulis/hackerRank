@@ -12,8 +12,7 @@ import java.util.function.*;
 import java.util.regex.*;
 import java.util.stream.*;
 
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 class Result {
 
@@ -54,18 +53,18 @@ class Result {
         prices.sort(new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
-                if(o1 > o2){
+                if (o1 > o2) {
                     return 1;
                 }
-                if(o1 < o2) return -1;
+                if (o1 < o2) return -1;
                 return 0;
             }
         });
         int temp = k;
         int result = 0;
         for (Integer i : prices
-             ) {
-            if(i <= temp){
+        ) {
+            if (i <= temp) {
                 result++;
                 temp -= i;
             }
@@ -73,30 +72,75 @@ class Result {
         return result;
     }
 
-    public static int activityNotifications(List<Integer> expenditure, int d){
+    public static int activityNotifications(List<Integer> expenditure, int d) {
         int result = 0;
-        LinkedList<Integer> temp = new LinkedList<>();
-        for (Integer p : expenditure
-             ) {
-            if(temp.size() == d){
-                List<Integer> temp1 = new ArrayList<>(temp);
-                temp1.sort(new Comparator<Integer>() {
-                    @Override
-                    public int compare(Integer o1, Integer o2) {
-                        if(o1 > o2) return 1;
-                        if(o1 < o2) return -1;
-                        return 0;
-                    }
-                });
-                if(d % 2 == 0){
-                    double u = (temp1.get((temp1.size() / 2)) + temp1.get((temp1.size() / 2) + 1)) / 2;
-                    if(2 * u <= p) result++;
-                }else{
-                    if(p >= 2 * temp1.get(temp1.size()/2)) result++;
+        int median = 0;
+        int[] copyCountSort = new int[201];
+        int[] countSort = new int[201];
+        for (int i = 0; i < d; i++) {
+            countSort[expenditure.get(i)]++;
+        }
+        for (int i = 1; i < 201; i++) {
+            countSort[i] += countSort[i - 1];
+        }
+
+        if (d % 2 == 0) {
+            median = 0;
+            for (int i = 0; i < 201; i++) {
+                if ((d / 2) + 1 <= countSort[i]) {
+                    median += i;
+                    break;
                 }
-                temp.removeFirst();
             }
-            temp.addLast(p);
+            for (int i = 0; i < 201; i++) {
+                if ((d / 2) <= countSort[i]) {
+                    median += i;
+                    break;
+                }
+            }
+        } else {
+            for (int i = 0; i < 201; i++) {
+                if ((d / 2) + 1 <= countSort[i]) {
+                    median = 2 * i;
+                    break;
+                }
+            }
+        }
+        if (median <= expenditure.get(d)) {
+            result++;
+        }
+        for (int b = 0; b < expenditure.size() - d; b++) {
+            for (int i = expenditure.get(b); i < 201; i++) {
+                countSort[i]--;
+            }
+            for (int i = expenditure.get(d + b); i < 201; i++) {
+                countSort[i]++;
+            }
+            if (d % 2 == 0) {
+                median = 0;
+                for (int i = 0; i < 201; i++) {
+                    if ((d / 2) + 1 <= countSort[i]) {
+                        median += i;
+                        break;
+                    }
+                }
+                for (int i = 0; i < 201; i++) {
+                    if ((d / 2) <= countSort[i]) {
+                        median += i;
+                        break;
+                    }
+                }
+            } else {
+                for (int i = 0; i < 201; i++) {
+                    if ((d / 2) + 1 <= countSort[i]) {
+                        median = 2 * i;
+                        break;
+                    }
+                }
+            }
+            if (d + b + 1 < expenditure.size() && median <= expenditure.get(d + b + 1)) {
+                result++;
+            }
         }
         return result;
     }
