@@ -145,6 +145,22 @@ class Result {
         return result;
     }
 
+    public static long countInversions(List<Integer> arr) {
+        // Write your code here
+        int result = 0;
+        for (int i = 0; i < arr.size(); i++) {
+            int j = i - 1;
+            while (j >= 0 && arr.get(j) > arr.get(j + 1)) {
+                result++;
+                int temp = arr.get(j + 1);
+                arr.set(j + 1, arr.get(j));
+                arr.set(j, temp);
+                j--;
+            }
+        }
+        return result;
+    }
+
 }
 
 public class Solution {
@@ -152,18 +168,24 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+        int t = Integer.parseInt(bufferedReader.readLine().trim());
 
-        int n = Integer.parseInt(firstMultipleInput[0]);
+        IntStream.range(0, t).forEach(tItr -> {
+            try {
+                int n = Integer.parseInt(bufferedReader.readLine().trim());
 
-        int d = Integer.parseInt(firstMultipleInput[1]);
+                List<Integer> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                        .map(Integer::parseInt)
+                        .collect(toList());
 
-        List<Integer> expenditure = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-                .map(Integer::parseInt)
-                .collect(toList());
+                long result = Result.countInversions(arr);
 
-        int result = Result.activityNotifications(expenditure, d);
-        System.out.println(result);
+                System.out.println(result);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
         bufferedReader.close();
     }
 }
