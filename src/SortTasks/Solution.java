@@ -15,7 +15,7 @@ import java.util.stream.*;
 import static java.util.stream.Collectors.*;
 
 class Result {
-    private static long result = 0L;
+    private static long result;
     /*
      * Complete the 'countSwaps' function below.
      *
@@ -147,10 +147,10 @@ class Result {
 
     private static void mergeSort(List<Integer> arr, List<Integer> copy, int i, int j) {
         if (j - i <= 0) return;
-        int midle = (j - i) / 2;
-        mergeSort(copy, arr, i, midle);
-        mergeSort(copy, arr, midle + 1, j);
-        merge(arr, copy, i, j, midle + 1);
+        int mid = i + (j - i) / 2;
+        mergeSort(copy, arr, i, mid);
+        mergeSort(copy, arr, mid + 1, j);
+        merge(arr, copy, i, j, mid + 1);
     }
 
     private static void merge(List<Integer> arr, List<Integer> copy, int i, int j, int mid) {
@@ -159,11 +159,11 @@ class Result {
         for (int k = l; k <= j; k++) {
             if (l > mid - 1) copy.set(k, arr.get(r++));
             else if (r > j) copy.set(k, arr.get(l++));
-            else if (arr.get(l) < arr.get(r)) {
-                if(l - k > 0) result += k - l;
+            else if (arr.get(l) <= arr.get(r)) {
+                if(l - k > 0) result += l - k;
                 copy.set(k, arr.get(l++));
             } else {
-                if(r - k > 0) result += k - l;
+                if(r - k > 0) result += r - k;
                 copy.set(k, arr.get(r++));
             }
         }
@@ -172,6 +172,7 @@ class Result {
     public static long countInversions(List<Integer> arr) {
         // Write your code here
         List<Integer> copyArr = new ArrayList<>(arr);
+        result = 0L;
         mergeSort(arr, copyArr, 0, arr.size() - 1);
         return result;
     }
@@ -191,9 +192,7 @@ public class Solution {
                 List<Integer> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
                         .map(Integer::parseInt)
                         .collect(toList());
-
                 long result = Result.countInversions(arr);
-
                 System.out.println(result);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
