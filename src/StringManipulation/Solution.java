@@ -28,15 +28,15 @@ class Result {
         // Write your code here
         int result = 0;
         Map<Character, Integer> str = new HashMap<>();
-        char[] charArray = b.length() < a.length() ? a.toCharArray() : b.toCharArray();
-        for (int i = 0; i < (b.length() < a.length() ? a.length() : b.length()); i++) {
+        char[] charArray = a.toCharArray();
+        for (int i = 0; i < a.length(); i++) {
             if (str.containsKey(charArray[i])) {
                 str.put(charArray[i], str.get(charArray[i]) + 1);
             } else {
                 str.put(charArray[i], 1);
             }
         }
-        charArray = b.length() > a.length() ? a.toCharArray() : b.toCharArray();
+        charArray = b.toCharArray();
         for (int i = 0; i < charArray.length; i++) {
             if(str.containsKey(charArray[i])){
                 if(str.get(charArray[i]) > 0){
@@ -46,6 +46,12 @@ class Result {
                 }
             }else{
                 result++;
+            }
+        }
+        for (Map.Entry<Character, Integer> entry : str.entrySet()
+             ) {
+            if(entry.getValue() > 0){
+                result += entry.getValue();
             }
         }
         return result;
