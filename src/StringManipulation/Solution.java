@@ -23,6 +23,10 @@ class Result {
      *  1. STRING a
      *  2. STRING b
      */
+    public static int alternatingCharacters(String s) {
+        // Write your code here
+        return 0;
+    }
 
     public static int makeAnagram(String a, String b) {
         // Write your code here
@@ -38,19 +42,19 @@ class Result {
         }
         charArray = b.toCharArray();
         for (int i = 0; i < charArray.length; i++) {
-            if(str.containsKey(charArray[i])){
-                if(str.get(charArray[i]) > 0){
+            if (str.containsKey(charArray[i])) {
+                if (str.get(charArray[i]) > 0) {
                     str.put(charArray[i], str.get(charArray[i]) - 1);
-                }else{
+                } else {
                     result++;
                 }
-            }else{
+            } else {
                 result++;
             }
         }
         for (Map.Entry<Character, Integer> entry : str.entrySet()
-             ) {
-            if(entry.getValue() > 0){
+        ) {
+            if (entry.getValue() > 0) {
                 result += entry.getValue();
             }
         }
@@ -63,13 +67,20 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        String a = bufferedReader.readLine();
+        int q = Integer.parseInt(bufferedReader.readLine().trim());
 
-        String b = bufferedReader.readLine();
+        IntStream.range(0, q).forEach(qItr -> {
+            try {
+                String s = bufferedReader.readLine();
 
-        int res = Result.makeAnagram(a, b);
+                int result = Result.alternatingCharacters(s);
+                System.out.println(result);
 
-        System.out.println(res);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
 
         bufferedReader.close();
 
