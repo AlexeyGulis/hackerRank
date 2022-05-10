@@ -1,5 +1,7 @@
 package StringManipulation;
 
+import edu.princeton.cs.algs4.In;
+
 import javax.swing.plaf.basic.BasicColorChooserUI;
 import java.io.*;
 import java.math.*;
@@ -25,34 +27,49 @@ class Result {
      *  2. STRING b
      */
     public static String isValid(String s) {
-        char[] ascii = new char[255];
+        HashMap<Character, Integer> countLetters = new HashMap<>();
         char[] charS = s.toCharArray();
+        int max = 1;
+        char minLetter = '0';
         for (int i = 0; i < charS.length; i++) {
-            ascii[charS[i]]++;
-        }
-        char temp = 0;
-        int count = 0;
-        for (int i = 0; i < 255; i++) {
-            if(count > 1){
-                return "NO";
-            }
-            if (ascii[i] != 0) {
-                if (temp == 0) {
-                    temp = ascii[i];
+            if (countLetters.containsKey(charS[i])) {
+                countLetters.put(charS[i], countLetters.get(charS[i]) + 1);
+                if (max < countLetters.get(charS[i])) {
+                    max = countLetters.get(charS[i]);
 
-                } else {
-                    int r = Math.abs(temp - ascii[i]);
-                    if(r == 1){
-                        count++;
-                    }
-                    if(r > 1){
+                }
+            } else {
+                countLetters.put(charS[i], 1);
+            }
+        }
+        int countM = 0;
+        boolean flag = true;
+        for (Map.Entry<Character, Integer> ascii : countLetters.entrySet()
+        ) {
+            if (max - ascii.getValue() == 1) {
+                countM++;
+                minLetter = ascii.getKey();
+            }
+            if (max - ascii.getValue() > 1) {
+                if(ascii.getValue() == 1){
+                    if (flag) {
+                        flag = false;
+                    } else {
                         return "NO";
                     }
-                    temp = ascii[i];
+                }else{
+                    return "NO";
                 }
             }
         }
-        return "YES";
+        if (countM == 0) return "YES";
+        if (countM == countLetters.size() - 1) {
+            return "YES";
+        }
+        if (countM == 1 && countLetters.get(minLetter) == 1) {
+            return "YES";
+        }
+        return "NO";
     }
 
     public static int alternatingCharacters(String s) {
