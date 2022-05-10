@@ -1,5 +1,6 @@
 package StringManipulation;
 
+import javax.swing.plaf.basic.BasicColorChooserUI;
 import java.io.*;
 import java.math.*;
 import java.security.*;
@@ -23,9 +24,47 @@ class Result {
      *  1. STRING a
      *  2. STRING b
      */
+    public static String isValid(String s) {
+        char[] ascii = new char[255];
+        char[] charS = s.toCharArray();
+        for (int i = 0; i < charS.length; i++) {
+            ascii[charS[i]]++;
+        }
+        char temp = 0;
+        int count = 0;
+        for (int i = 0; i < 255; i++) {
+            if(count > 1){
+                return "NO";
+            }
+            if (ascii[i] != 0) {
+                if (temp == 0) {
+                    temp = ascii[i];
+
+                } else {
+                    int r = Math.abs(temp - ascii[i]);
+                    if(r == 1){
+                        count++;
+                    }
+                    if(r > 1){
+                        return "NO";
+                    }
+                    temp = ascii[i];
+                }
+            }
+        }
+        return "YES";
+    }
+
     public static int alternatingCharacters(String s) {
         // Write your code here
-        return 0;
+        int result = 0;
+        char[] charString = s.toCharArray();
+        for (int i = 1; i < charString.length; i++) {
+            if (charString[i] == charString[i - 1]) {
+                result++;
+            }
+        }
+        return result;
     }
 
     public static int makeAnagram(String a, String b) {
@@ -67,20 +106,11 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        int q = Integer.parseInt(bufferedReader.readLine().trim());
+        String s = bufferedReader.readLine();
 
-        IntStream.range(0, q).forEach(qItr -> {
-            try {
-                String s = bufferedReader.readLine();
+        String result = Result.isValid(s);
 
-                int result = Result.alternatingCharacters(s);
-                System.out.println(result);
-
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
+        System.out.println(result);
 
         bufferedReader.close();
 
