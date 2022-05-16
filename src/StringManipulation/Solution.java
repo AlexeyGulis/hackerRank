@@ -103,7 +103,7 @@ class Result {
             }
 
         }
-        //result += n;
+        result += n;
         return result;
     }
 
