@@ -72,10 +72,15 @@ class Result {
                 if (str.length() != 0 && substings[j].isFlag()) {
                     if (substings[j].getIndex() != 0) {
                         if (str.charAt(0) == string[i]) {
+                            int length = str.length() - substings[j].getIndex() - 1;
+                            if (length >= 1) {
+                                result -= (length - 1) * length / 2;
+                                result += (length + 1) * length / 2;
+                            }
                             str.append(string[i]);
                             substings[j].setS(str);
+                            result++;
                             if ((str.length() - 1) / 2 == substings[j].getIndex()) {
-                                result++;
                                 substings[j] = new SubstringNode();
                             }
                         } else {
@@ -83,20 +88,22 @@ class Result {
                         }
                     } else {
                         if (str.charAt(str.length() - 1) != string[i]) {
-                            str.append(string[i]);
-                            result++;
+                            substings[j].setIndex(str.length());
                         } else {
-                            str.append(string[i]);
-                            substings[j].setIndex(str.length() - 1);
+                            if (str.length() >= 1) {
+                                result -= (str.length() - 1) * str.length() / 2;
+                                result += (str.length() + 1) * str.length() / 2;
+                            }
                         }
+                        str.append(string[i]);
                         substings[j].setS(str);
                     }
                 }
             }
             if (substings[string[i]].getS().length() == 0) {
                 substings[string[i]].setS(new StringBuilder().append(string[i]));
-            }else{
-                if(!substings[string[i]].isFlag()){
+            } else {
+                if (!substings[string[i]].isFlag()) {
                     substings[string[i]] = new SubstringNode();
                     substings[string[i]].setS(new StringBuilder().append(string[i]));
                 }
