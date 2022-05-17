@@ -75,14 +75,17 @@ class Result {
                             str.append(string[i]);
                             substings[j].setS(str);
                             result++;
-                            if ((str.length() - 1) / 2 == substings[j].getIndex()) {
-                                int ind = substings[j].getIndex() + 1;
+                            int index = substings[j].getIndex();
+                            if ((str.length() - 1) / 2 == index) {
                                 substings[j] = new SubstringNode();
                                 StringBuilder temp = new StringBuilder();
-                                for (int k = ind; k < str.length(); k++) {
+                                for (int k = index + 1; k < str.length(); k++) {
                                     temp.append(str.charAt(k));
                                 }
                                 substings[j].setS(temp);
+                            }
+                            if(i == n - 1){
+                                result += (str.length() - index - 1) * (str.length() - index - 2) / 2;
                             }
                         } else {
                             int ind = substings[j].getIndex();
@@ -92,7 +95,10 @@ class Result {
                                 for (int k = ind + 1; k < str.length(); k++) {
                                     temp.append(str.charAt(k));
                                 }
+                                result += (temp.length() - 1) * temp.length() / 2;
+                                temp.append(string[i]);
                                 substings[j].setS(temp);
+                                substings[j].setIndex(temp.length() - 1);
                             } else {
                                 substings[j].setFlag(false);
                             }
