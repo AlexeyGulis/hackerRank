@@ -26,6 +26,12 @@ class Result {
      *  1. STRING a
      *  2. STRING b
      */
+
+    public static int commonChild(String s1, String s2) {
+        // Write your code here
+        return 0;
+    }
+
     private static class SubstringNode {
         private StringBuilder s = new StringBuilder();
         private int index = 0;
@@ -229,24 +235,17 @@ class Result {
 }
 
 public class Solution {
-
-    private static final Scanner scanner = new Scanner(System.in);
-
-
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = scanner.nextInt();
-        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+        String s1 = bufferedReader.readLine();
 
-        String s = scanner.nextLine();
+        String s2 = bufferedReader.readLine();
 
-        long result = Result.substrCount(n, s);
+        int result = Result.commonChild(s1, s2);
 
         System.out.println(result);
 
         bufferedReader.close();
-        scanner.close();
-
     }
 }
