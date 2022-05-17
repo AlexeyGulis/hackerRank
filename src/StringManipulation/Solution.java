@@ -72,31 +72,46 @@ class Result {
                 if (str.length() != 0 && substings[j].isFlag()) {
                     if (substings[j].getIndex() != 0) {
                         if (str.charAt(0) == string[i]) {
-                            int length = str.length() - substings[j].getIndex() - 1;
-                            if (length >= 1) {
-                                result -= (length - 1) * length / 2;
-                                result += (length + 1) * length / 2;
-                            }
                             str.append(string[i]);
                             substings[j].setS(str);
                             result++;
                             if ((str.length() - 1) / 2 == substings[j].getIndex()) {
+                                int ind = substings[j].getIndex() + 1;
                                 substings[j] = new SubstringNode();
+                                StringBuilder temp = new StringBuilder();
+                                for (int k = ind; k < str.length(); k++) {
+                                    temp.append(str.charAt(k));
+                                }
+                                substings[j].setS(temp);
                             }
                         } else {
-                            substings[j].setFlag(false);
+                            int ind = substings[j].getIndex();
+                            if (ind < str.length() - 1) {
+                                substings[j] = new SubstringNode();
+                                StringBuilder temp = new StringBuilder();
+                                for (int k = ind + 1; k < str.length(); k++) {
+                                    temp.append(str.charAt(k));
+                                }
+                                substings[j].setS(temp);
+                            } else {
+                                substings[j].setFlag(false);
+                            }
+
                         }
                     } else {
                         if (str.charAt(str.length() - 1) != string[i]) {
+                            result += (str.length() - 1) * str.length() / 2;
                             substings[j].setIndex(str.length());
+                            str.append(string[i]);
+                            substings[j].setS(str);
                         } else {
-                            if (str.length() >= 1) {
-                                result -= (str.length() - 1) * str.length() / 2;
-                                result += (str.length() + 1) * str.length() / 2;
+                            str.append(string[i]);
+                            substings[j].setS(str);
+                            if (i == n - 1) {
+                                result += (str.length() - 1) * str.length() / 2;
                             }
                         }
-                        str.append(string[i]);
-                        substings[j].setS(str);
+
                     }
                 }
             }
