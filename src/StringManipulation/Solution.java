@@ -29,7 +29,17 @@ class Result {
 
     public static int commonChild(String s1, String s2) {
         // Write your code here
-        return 0;
+        int[][] C = new int[s1.length() + 1][s2.length() + 1];
+        for (int i = 0; i < s1.length(); i++) {
+            for (int j = 0; j < s2.length(); j++) {
+                if (s1.charAt(i) == s2.charAt(j)) {
+                    C[i + 1][j + 1] = C[i][j] + 1;
+                } else {
+                    C[i + 1][j + 1] = C[i + 1][j] > C[i][j + 1] ? C[i + 1][j] : C[i][j + 1];
+                }
+            }
+        }
+        return C[s1.length()][s2.length()];
     }
 
     private static class SubstringNode {
@@ -90,7 +100,7 @@ class Result {
                                 }
                                 substings[j].setS(temp);
                             }
-                            if(i == n - 1){
+                            if (i == n - 1) {
                                 result += (str.length() - index - 1) * (str.length() - index - 2) / 2;
                             }
                         } else {
