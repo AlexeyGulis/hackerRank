@@ -22,6 +22,12 @@ class Result {
      * The function accepts INTEGER_ARRAY arr as parameter.
      */
 
+    public static int luckBalance(int k, List<List<Integer>> contests) {
+        // Write your code here
+        return 0;
+    }
+
+
     public static int minimumAbsoluteDifference(List<Integer> arr) {
 
         Integer[] arrs = new Integer[arr.size()];
@@ -43,13 +49,27 @@ public class Solution {
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = Integer.parseInt(bufferedReader.readLine().trim());
+        String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
 
-        List<Integer> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-                .map(Integer::parseInt)
-                .collect(toList());
+        int n = Integer.parseInt(firstMultipleInput[0]);
 
-        int result = Result.minimumAbsoluteDifference(arr);
+        int k = Integer.parseInt(firstMultipleInput[1]);
+
+        List<List<Integer>> contests = new ArrayList<>();
+
+        IntStream.range(0, n).forEach(i -> {
+            try {
+                contests.add(
+                        Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                                .map(Integer::parseInt)
+                                .collect(toList())
+                );
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        int result = Result.luckBalance(k, contests);
 
         System.out.println(result);
 
