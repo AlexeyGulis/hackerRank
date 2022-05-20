@@ -23,8 +23,23 @@ class Result {
      */
 
     public static int getMinimumCost(int k, int[] c) {
-
-        return 0;
+        int result = 0;
+        Arrays.sort(c);
+        int[] m = new int[k];
+        int indexF = k - 1;
+        for (int i = c.length - 1; i >= 0; i--) {
+            if (indexF == 0) {
+                result += (m[indexF]++ + 1) * c[i];
+                indexF = k - 1;
+            } else if (indexF == k - 1) {
+                result += (m[indexF]++ + 1) * c[i];
+                indexF--;
+            } else {
+                result += (m[indexF]++ + 1) * c[i];
+                indexF--;
+            }
+        }
+        return result;
     }
 
     public static int luckBalance(int k, List<List<Integer>> contests) {
@@ -33,8 +48,8 @@ class Result {
         Collections.sort(contests, new Comparator<List<Integer>>() {
             @Override
             public int compare(List<Integer> o1, List<Integer> o2) {
-                if(o1.get(0) > o2.get(0)) return -1;
-                if(o1.get(0) < o2.get(0)) return 1;
+                if (o1.get(0) > o2.get(0)) return -1;
+                if (o1.get(0) < o2.get(0)) return 1;
                 return 0;
             }
         });
