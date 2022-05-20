@@ -21,6 +21,10 @@ class Result {
      * The function is expected to return an INTEGER.
      * The function accepts INTEGER_ARRAY arr as parameter.
      */
+    public static int maxMin(int k, List<Integer> arr) {
+        // Write your code here
+        return 0;
+    }
 
     public static int getMinimumCost(int k, int[] c) {
         int result = 0;
@@ -66,7 +70,6 @@ class Result {
         return luck;
     }
 
-
     public static int minimumAbsoluteDifference(List<Integer> arr) {
 
         Integer[] arrs = new Integer[arr.size()];
@@ -84,33 +87,29 @@ class Result {
 
 public class Solution {
 
-    private static final Scanner scanner = new Scanner(System.in);
-
     public static void main(String[] args) throws IOException {
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] nk = scanner.nextLine().split(" ");
+        int n = Integer.parseInt(bufferedReader.readLine().trim());
 
-        int n = Integer.parseInt(nk[0]);
+        int k = Integer.parseInt(bufferedReader.readLine().trim());
 
-        int k = Integer.parseInt(nk[1]);
+        List<Integer> arr = IntStream.range(0, n).mapToObj(i -> {
+                    try {
+                        return bufferedReader.readLine().replaceAll("\\s+$", "");
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                })
+                .map(String::trim)
+                .map(Integer::parseInt)
+                .collect(toList());
 
-        int[] c = new int[n];
+        int result = Result.maxMin(k, arr);
 
-        String[] cItems = scanner.nextLine().split(" ");
-        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
-
-        for (int i = 0; i < n; i++) {
-            int cItem = Integer.parseInt(cItems[i]);
-            c[i] = cItem;
-        }
-
-        int minimumCost = Result.getMinimumCost(k, c);
-
-        System.out.println(minimumCost);
+        System.out.println(result);
 
         bufferedReader.close();
-        scanner.close();
     }
 }
