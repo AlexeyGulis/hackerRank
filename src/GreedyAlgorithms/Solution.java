@@ -22,6 +22,11 @@ class Result {
      * The function accepts INTEGER_ARRAY arr as parameter.
      */
 
+    public static int getMinimumCost(int k, int[] c) {
+
+        return 0;
+    }
+
     public static int luckBalance(int k, List<List<Integer>> contests) {
         // Write your code here
         int luck = 0;
@@ -64,34 +69,33 @@ class Result {
 
 public class Solution {
 
+    private static final Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) throws IOException {
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+        String[] nk = scanner.nextLine().split(" ");
 
-        int n = Integer.parseInt(firstMultipleInput[0]);
+        int n = Integer.parseInt(nk[0]);
 
-        int k = Integer.parseInt(firstMultipleInput[1]);
+        int k = Integer.parseInt(nk[1]);
 
-        List<List<Integer>> contests = new ArrayList<>();
+        int[] c = new int[n];
 
-        IntStream.range(0, n).forEach(i -> {
-            try {
-                contests.add(
-                        Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-                                .map(Integer::parseInt)
-                                .collect(toList())
-                );
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
+        String[] cItems = scanner.nextLine().split(" ");
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
 
-        int result = Result.luckBalance(k, contests);
+        for (int i = 0; i < n; i++) {
+            int cItem = Integer.parseInt(cItems[i]);
+            c[i] = cItem;
+        }
 
-        System.out.println(result);
+        int minimumCost = Result.getMinimumCost(k, c);
+
+        System.out.println(minimumCost);
 
         bufferedReader.close();
+        scanner.close();
     }
 }
