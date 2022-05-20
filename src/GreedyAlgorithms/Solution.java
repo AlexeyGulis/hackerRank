@@ -24,7 +24,26 @@ class Result {
 
     public static int luckBalance(int k, List<List<Integer>> contests) {
         // Write your code here
-        return 0;
+        int luck = 0;
+        Collections.sort(contests, new Comparator<List<Integer>>() {
+            @Override
+            public int compare(List<Integer> o1, List<Integer> o2) {
+                if(o1.get(0) > o2.get(0)) return -1;
+                if(o1.get(0) < o2.get(0)) return 1;
+                return 0;
+            }
+        });
+        int count = 0;
+        for (int i = 0; i < contests.size(); i++) {
+            if (contests.get(i).get(1) == 1) {
+                if (count++ < k) luck += contests.get(i).get(0);
+                else luck -= contests.get(i).get(0);
+            } else {
+                luck += contests.get(i).get(0);
+            }
+
+        }
+        return luck;
     }
 
 
@@ -36,7 +55,7 @@ class Result {
         int result = Math.abs(arrs[0] - arrs[1]);
         // Write your code here
         for (int i = 1; i < arrs.length; i++) {
-            if(Math.abs(arrs[i-1] - arrs[i]) < result) result = Math.abs(arrs[i-1] - arrs[i]);
+            if (Math.abs(arrs[i - 1] - arrs[i]) < result) result = Math.abs(arrs[i - 1] - arrs[i]);
         }
         return result;
     }
