@@ -33,14 +33,12 @@ class Result {
         int j = 0;
         for (int i = 0; i < s.length(); i++) {
             if (t.charAt(j) == s.charAt(i)) {
-                if (j == t.length() - 1) {
+                j++;
+                if (j == t.length()) {
                     return true;
                 }
-                j++;
+
             }
-        }
-        if (j == t.length() - 1) {
-            return true;
         }
         return false;
     }
