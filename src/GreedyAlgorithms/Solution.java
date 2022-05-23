@@ -21,6 +21,52 @@ class Result {
      * The function is expected to return an INTEGER.
      * The function accepts INTEGER_ARRAY arr as parameter.
      */
+    private static String reversStirng(String s) {
+        StringBuilder str = new StringBuilder();
+        str.append(s);
+        str.reverse();
+        return str.toString();
+    }
+
+    private static String shuffle(String s) {
+        List<String> str = Arrays.asList(s.split(""));
+        Collections.shuffle(str);
+        StringBuilder strRe = new StringBuilder();
+        for (int i = 0; i < str.size(); i++) {
+            strRe.append(str.get(i));
+        }
+        return strRe.toString();
+    }
+
+    private static boolean check(String s, String t){
+        return true;
+    }
+
+    public static String reverseShuffleMerge(String s) {
+        // Write your code here
+        String result = "";
+        StringBuilder strM = new StringBuilder();
+        int[] ascii = new int[255];
+        for (int i = 0; i < s.length(); i++) {
+            ascii[s.charAt(i)]++;
+        }
+        for (int i = 0; i < 255; i++) {
+            if (ascii[i] != 0) {
+                for (int j = 0; j < ascii[i] / 2; j++) {
+                    strM.append((char) i);
+                }
+            }
+        }
+
+        String main = strM.toString();
+        for (int i = 1; i < main.length(); i++) {
+            String temp = main.substring(i) + main.substring(0, i);
+        }
+
+
+        return result;
+    }
+
     public static int maxMin(int k, List<Integer> arr) {
         // Write your code here
         int unfairness = Integer.MAX_VALUE;
@@ -98,22 +144,9 @@ public class Solution {
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = Integer.parseInt(bufferedReader.readLine().trim());
+        String s = bufferedReader.readLine();
 
-        int k = Integer.parseInt(bufferedReader.readLine().trim());
-
-        List<Integer> arr = IntStream.range(0, n).mapToObj(i -> {
-                    try {
-                        return bufferedReader.readLine().replaceAll("\\s+$", "");
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                })
-                .map(String::trim)
-                .map(Integer::parseInt)
-                .collect(toList());
-
-        int result = Result.maxMin(k, arr);
+        String result = Result.reverseShuffleMerge(s);
 
         System.out.println(result);
 
