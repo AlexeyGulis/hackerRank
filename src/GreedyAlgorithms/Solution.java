@@ -28,23 +28,26 @@ class Result {
         return str.toString();
     }
 
-    private static String shuffle(String s) {
-        List<String> str = Arrays.asList(s.split(""));
-        Collections.shuffle(str);
-        StringBuilder strRe = new StringBuilder();
-        for (int i = 0; i < str.size(); i++) {
-            strRe.append(str.get(i));
-        }
-        return strRe.toString();
-    }
 
-    private static boolean check(String s, String t){
-        return true;
+    private static boolean check(String s, String t) {
+        int j = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (t.charAt(j) == s.charAt(i)) {
+                if (j == t.length() - 1) {
+                    return true;
+                }
+                j++;
+            }
+        }
+        if (j == t.length() - 1) {
+            return true;
+        }
+        return false;
     }
 
     public static String reverseShuffleMerge(String s) {
         // Write your code here
-        String result = "";
+        String result = null;
         StringBuilder strM = new StringBuilder();
         int[] ascii = new int[255];
         for (int i = 0; i < s.length(); i++) {
@@ -57,13 +60,36 @@ class Result {
                 }
             }
         }
-
         String main = strM.toString();
-        for (int i = 1; i < main.length(); i++) {
+        for (int i = 0; i < main.length(); i++) {
             String temp = main.substring(i) + main.substring(0, i);
+            if (result == null) {
+                if (check(s, reversStirng(temp))) {
+                    result = temp;
+                }
+                if (check(s, temp)) {
+                    if (result == null) {
+                        result = reversStirng(temp);
+                    } else {
+                        if (result.compareTo(reversStirng(temp)) > 1) {
+                            result = reversStirng(temp);
+                        }
+                    }
+                }
+            } else {
+                if (check(s, reversStirng(temp))) {
+                    if (result.compareTo(temp) > 1) {
+                        result = temp;
+                    }
+                }
+                if (check(s, temp)) {
+                    if (result.compareTo(reversStirng(temp)) > 1) {
+                        result = reversStirng(temp);
+                    }
+                }
+            }
+
         }
-
-
         return result;
     }
 
