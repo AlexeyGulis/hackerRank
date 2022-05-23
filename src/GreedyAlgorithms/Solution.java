@@ -23,7 +23,14 @@ class Result {
      */
     public static int maxMin(int k, List<Integer> arr) {
         // Write your code here
-        return 0;
+        int unfairness = Integer.MAX_VALUE;
+        Collections.sort(arr);
+        for (int i = 0; i < arr.size(); i++) {
+            if (i + k - 1 < arr.size()) {
+                if (unfairness > arr.get(i + k - 1) - arr.get(i)) unfairness = arr.get(i + k - 1) - arr.get(i);
+            }
+        }
+        return unfairness;
     }
 
     public static int getMinimumCost(int k, int[] c) {
