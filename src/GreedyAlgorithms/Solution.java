@@ -1,5 +1,7 @@
 package GreedyAlgorithms;
 
+import edu.princeton.cs.algs4.In;
+
 import java.io.*;
 import java.math.*;
 import java.security.*;
@@ -21,74 +23,41 @@ class Result {
      * The function is expected to return an INTEGER.
      * The function accepts INTEGER_ARRAY arr as parameter.
      */
-    private static String reversStirng(String s) {
-        StringBuilder str = new StringBuilder();
-        str.append(s);
-        str.reverse();
-        return str.toString();
-    }
 
-
-    private static boolean check(String s, String t) {
-        int j = 0;
-        for (int i = 0; i < s.length(); i++) {
-            if (t.charAt(j) == s.charAt(i)) {
-                j++;
-                if (j == t.length()) {
-                    return true;
-                }
-
-            }
-        }
-        return false;
-    }
 
     public static String reverseShuffleMerge(String s) {
         // Write your code here
-        String result = null;
-        StringBuilder strM = new StringBuilder();
-        int[] ascii = new int[255];
+        StringBuilder str = new StringBuilder();
+        Map<Character, Integer> totalCount = new HashMap<>();
         for (int i = 0; i < s.length(); i++) {
-            ascii[s.charAt(i)]++;
+            char ch = s.charAt(i);
+            totalCount.put(ch, totalCount.getOrDefault(ch, 0) + 1);
         }
-        for (int i = 0; i < 255; i++) {
-            if (ascii[i] != 0) {
-                for (int j = 0; j < ascii[i] / 2; j++) {
-                    strM.append((char) i);
-                }
-            }
-        }
-        String main = strM.toString();
-        for (int i = 0; i < main.length(); i++) {
-            String temp = main.substring(i) + main.substring(0, i);
-            if (result == null) {
-                if (check(s, reversStirng(temp))) {
-                    result = temp;
-                }
-                if (check(s, temp)) {
-                    if (result == null) {
-                        result = reversStirng(temp);
-                    } else {
-                        if (result.compareTo(reversStirng(temp)) > 1) {
-                            result = reversStirng(temp);
-                        }
-                    }
-                }
-            } else {
-                if (check(s, reversStirng(temp))) {
-                    if (result.compareTo(temp) > 1) {
-                        result = temp;
-                    }
-                }
-                if (check(s, temp)) {
-                    if (result.compareTo(reversStirng(temp)) > 1) {
-                        result = reversStirng(temp);
-                    }
-                }
-            }
 
+        Map<Character, Integer> used = new HashMap<>();
+        Map<Character, Integer> unUsed = new HashMap<>(totalCount);
+
+        for (int i = s.length() - 1; i >= 0; i--) {
+            char letter = s.charAt(i);
+            unUsed.put(letter, unUsed.getOrDefault(letter, 0) - 1);
+            if (used.getOrDefault(letter, 0) == totalCount.get(letter) / 2) {
+                continue;
+            }
+            while (str.length() > 0) {
+                char prevLetter = str.charAt(str.length() - 1);
+                if (letter < prevLetter &&
+                        used.getOrDefault(prevLetter, 0) + unUsed.getOrDefault(prevLetter, 0) - 1 >= totalCount.get(prevLetter) / 2) {
+                    str.deleteCharAt(str.length() - 1);
+                    used.put(prevLetter, used.get(prevLetter) - 1);
+                } else {
+                    break;
+                }
+            }
+            str.append(letter);
+            used.put(letter, used.getOrDefault(letter, 0) + 1);
         }
-        return result;
+
+        return str.toString();
     }
 
     public static int maxMin(int k, List<Integer> arr) {
