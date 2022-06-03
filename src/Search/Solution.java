@@ -18,6 +18,19 @@ import static java.util.stream.Collectors.toList;
 
 class Result {
 
+    public static int pairs(int k, List<Integer> arr) {
+        // Write your code here
+        int result = 0;
+        HashSet<Integer> set = new HashSet<>();
+        for (int i = 0; i < arr.size(); i++) {
+            set.add(arr.get(i));
+        }
+        for (int i = 0; i < arr.size(); i++) {
+            if(set.contains(arr.get(i) - k)) result++;
+        }
+        return result;
+    }
+
     static class Node {
         public Node left;
         public Node right;
@@ -38,18 +51,18 @@ class Result {
         }
     }
 
-    public static void inorder_print(Node root, int K){
-        if (root != null){
-            if(root.depth % K == 0){
+    public static void inorder_print(Node root, int K) {
+        if (root != null) {
+            if (root.depth % K == 0) {
                 root.swap();
             }
             inorder_print(root.left, K);
-            System.out.print(root.value+" ");
+            System.out.print(root.value + " ");
             inorder_print(root.right, K);
         }
     }
 
-    public static void print_nodes(Node root, int K){
+    public static void print_nodes(Node root, int K) {
         inorder_print(root, K);
         System.out.println();
     }
@@ -94,36 +107,17 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = Integer.parseInt(bufferedReader.readLine().trim());
+        String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
 
-        List<List<Integer>> indexes = new ArrayList<>();
+        int n = Integer.parseInt(firstMultipleInput[0]);
 
-        IntStream.range(0, n).forEach(i -> {
-            try {
-                indexes.add(
-                        Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-                                .map(Integer::parseInt)
-                                .collect(toList())
-                );
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
+        int k = Integer.parseInt(firstMultipleInput[1]);
 
-        int queriesCount = Integer.parseInt(bufferedReader.readLine().trim());
-
-        List<Integer> queries = IntStream.range(0, queriesCount).mapToObj(i -> {
-                    try {
-                        return bufferedReader.readLine().replaceAll("\\s+$", "");
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                })
-                .map(String::trim)
+        List<Integer> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
                 .map(Integer::parseInt)
                 .collect(toList());
 
-        List<List<Integer>> result = Result.swapNodes(indexes, queries);
+        int result = Result.pairs(k, arr);
 
         bufferedReader.close();
     }
