@@ -18,9 +18,47 @@ import static java.util.stream.Collectors.toList;
 
 class Result {
 
-    static long triplets(int[] a, int[] b, int[] c) {
+    private static int binarySearchIndex(Integer[] a, int item){
+        int low = 0;
+        int high = a.length - 1;
+        while (low <= high ) {
+            int mid = low + (high - low) / 2;
+            if (item == a[mid])
+                return mid + 1;
+            else if (item > a[mid])
+                low = mid + 1;
+            else
+                high = mid - 1;
+        }
+        return low;
+    }
 
-        return 0L;
+    static long triplets(int[] a, int[] b, int[] c) {
+        long result = 0L;
+        HashSet<Integer> set = new HashSet<>();
+        for (int i = 0; i < a.length; i++) {
+            set.add(a[i]);
+        }
+        Integer[] a1 = set.toArray(new Integer[set.size()]);
+        set.clear();
+        for (int i = 0; i < b.length; i++) {
+            set.add(b[i]);
+        }
+        Integer[] b1 = set.toArray(new Integer[set.size()]);
+        set.clear();
+        for (int i = 0; i < c.length; i++) {
+            set.add(c[i]);
+        }
+        Integer[] c1 = set.toArray(new Integer[set.size()]);
+        Arrays.sort(a1);
+        Arrays.sort(b1);
+        Arrays.sort(c1);
+        for (int i = 0; i < b1.length; i++) {
+            int k = binarySearchIndex(a1, b1[i]);
+            int l = binarySearchIndex(c1, b1[i]);
+            result+= (long) k * (long) l;
+        }
+        return result;
     }
 
     public static int pairs(int k, List<Integer> arr) {
@@ -31,7 +69,7 @@ class Result {
             set.add(arr.get(i));
         }
         for (int i = 0; i < arr.size(); i++) {
-            if(set.contains(arr.get(i) - k)) result++;
+            if (set.contains(arr.get(i) - k)) result++;
         }
         return result;
     }
