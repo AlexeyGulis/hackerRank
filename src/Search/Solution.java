@@ -18,6 +18,11 @@ import static java.util.stream.Collectors.toList;
 
 class Result {
 
+    static long triplets(int[] a, int[] b, int[] c) {
+
+        return 0L;
+    }
+
     public static int pairs(int k, List<Integer> arr) {
         // Write your code here
         int result = 0;
@@ -104,20 +109,53 @@ class Result {
 }
 
 public class Solution {
+
+    private static final Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+        String[] lenaLenbLenc = scanner.nextLine().split(" ");
 
-        int n = Integer.parseInt(firstMultipleInput[0]);
+        int lena = Integer.parseInt(lenaLenbLenc[0]);
 
-        int k = Integer.parseInt(firstMultipleInput[1]);
+        int lenb = Integer.parseInt(lenaLenbLenc[1]);
 
-        List<Integer> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-                .map(Integer::parseInt)
-                .collect(toList());
+        int lenc = Integer.parseInt(lenaLenbLenc[2]);
 
-        int result = Result.pairs(k, arr);
+        int[] arra = new int[lena];
+
+        String[] arraItems = scanner.nextLine().split(" ");
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        for (int i = 0; i < lena; i++) {
+            int arraItem = Integer.parseInt(arraItems[i]);
+            arra[i] = arraItem;
+        }
+
+        int[] arrb = new int[lenb];
+
+        String[] arrbItems = scanner.nextLine().split(" ");
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        for (int i = 0; i < lenb; i++) {
+            int arrbItem = Integer.parseInt(arrbItems[i]);
+            arrb[i] = arrbItem;
+        }
+
+        int[] arrc = new int[lenc];
+
+        String[] arrcItems = scanner.nextLine().split(" ");
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        for (int i = 0; i < lenc; i++) {
+            int arrcItem = Integer.parseInt(arrcItems[i]);
+            arrc[i] = arrcItem;
+        }
+
+        long ans = Result.triplets(arra, arrb, arrc);
+
+        System.out.println(ans);
 
         bufferedReader.close();
     }
