@@ -18,10 +18,62 @@ import static java.util.stream.Collectors.toList;
 
 class Result {
 
-    private static int binarySearchIndex(Integer[] a, int item){
+    private static long checkResult(long time, long[] machines) {
+        long result = 0L;
+        for (int i = 0; i < machines.length; i++) {
+            result += time / machines[i];
+        }
+        return result;
+    }
+
+    private static long binarySearchTime(long min, long max, long[] machines, long goal) {
+        long mid = min + (max - min) / 2;
+        if (max - min == 1 && checkResult(max, machines) >= checkResult(min, machines)) {
+            return max;
+        } else {
+            if (checkResult(max, machines) > goal) {
+                if (checkResult(mid, machines) > goal) {
+                    return binarySearchTime(min, mid, machines, goal);
+                } else {
+                    return binarySearchTime(mid, max, machines, goal);
+                }
+            } else {
+                return 0;
+            }
+        }
+        /*if (checkResult(time, machines) > goal) {
+            if (checkResult(time - 1, machines) <= goal) {
+                if (checkResult(time - 1, machines) == goal) {
+                    long i = time - 1;
+                    while (checkResult(time - 1, machines) == checkResult(--i, machines)) {
+                    }
+                    return i + 1;
+                } else {
+                    return time;
+                }
+            } else {
+                return binarySearchTime(time - (time / 2), machines, goal);
+            }
+        } else if (checkResult(time, machines) < goal) {
+            if (checkResult(time + 1, machines) >= goal) {
+                return time + 1;
+            } else {
+                return binarySearchTime(time + (time / 2), machines, goal);
+            }
+        } else {
+            return time;
+        }*/
+    }
+
+    public static long minTime(long[] machines, long goal) {
+        long maxValue = Arrays.stream(machines).max().getAsLong();
+        return binarySearchTime(0, (goal / (long) machines.length) * maxValue, machines, goal);
+    }
+
+    private static int binarySearchIndex(Integer[] a, int item) {
         int low = 0;
         int high = a.length - 1;
-        while (low <= high ) {
+        while (low <= high) {
             int mid = low + (high - low) / 2;
             if (item == a[mid])
                 return mid + 1;
@@ -56,7 +108,7 @@ class Result {
         for (int i = 0; i < b1.length; i++) {
             int k = binarySearchIndex(a1, b1[i]);
             int l = binarySearchIndex(c1, b1[i]);
-            result+= (long) k * (long) l;
+            result += (long) k * (long) l;
         }
         return result;
     }
@@ -153,45 +205,23 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] lenaLenbLenc = scanner.nextLine().split(" ");
+        String[] nGoal = scanner.nextLine().split(" ");
 
-        int lena = Integer.parseInt(lenaLenbLenc[0]);
+        int n = Integer.parseInt(nGoal[0]);
 
-        int lenb = Integer.parseInt(lenaLenbLenc[1]);
+        long goal = Long.parseLong(nGoal[1]);
 
-        int lenc = Integer.parseInt(lenaLenbLenc[2]);
+        long[] machines = new long[n];
 
-        int[] arra = new int[lena];
-
-        String[] arraItems = scanner.nextLine().split(" ");
+        String[] machinesItems = scanner.nextLine().split(" ");
         scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
 
-        for (int i = 0; i < lena; i++) {
-            int arraItem = Integer.parseInt(arraItems[i]);
-            arra[i] = arraItem;
+        for (int i = 0; i < n; i++) {
+            long machinesItem = Long.parseLong(machinesItems[i]);
+            machines[i] = machinesItem;
         }
 
-        int[] arrb = new int[lenb];
-
-        String[] arrbItems = scanner.nextLine().split(" ");
-        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
-
-        for (int i = 0; i < lenb; i++) {
-            int arrbItem = Integer.parseInt(arrbItems[i]);
-            arrb[i] = arrbItem;
-        }
-
-        int[] arrc = new int[lenc];
-
-        String[] arrcItems = scanner.nextLine().split(" ");
-        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
-
-        for (int i = 0; i < lenc; i++) {
-            int arrcItem = Integer.parseInt(arrcItems[i]);
-            arrc[i] = arrcItem;
-        }
-
-        long ans = Result.triplets(arra, arrb, arrc);
+        long ans = Result.minTime(machines, goal);
 
         System.out.println(ans);
 
