@@ -28,11 +28,11 @@ class Result {
 
     private static long binarySearchTime(long min, long max, long[] machines, long goal) {
         long mid = min + (max - min) / 2;
-        if (max - min == 1 && checkResult(max, machines) >= checkResult(min, machines)) {
+        if (max - min == 1 && checkResult(min, machines) < goal && checkResult(max, machines) >= goal) {
             return max;
         } else {
-            if (checkResult(max, machines) > goal) {
-                if (checkResult(mid, machines) > goal) {
+            if (checkResult(min, machines) < goal) {
+                if (checkResult(mid, machines) >= goal) {
                     return binarySearchTime(min, mid, machines, goal);
                 } else {
                     return binarySearchTime(mid, max, machines, goal);
@@ -41,33 +41,13 @@ class Result {
                 return 0;
             }
         }
-        /*if (checkResult(time, machines) > goal) {
-            if (checkResult(time - 1, machines) <= goal) {
-                if (checkResult(time - 1, machines) == goal) {
-                    long i = time - 1;
-                    while (checkResult(time - 1, machines) == checkResult(--i, machines)) {
-                    }
-                    return i + 1;
-                } else {
-                    return time;
-                }
-            } else {
-                return binarySearchTime(time - (time / 2), machines, goal);
-            }
-        } else if (checkResult(time, machines) < goal) {
-            if (checkResult(time + 1, machines) >= goal) {
-                return time + 1;
-            } else {
-                return binarySearchTime(time + (time / 2), machines, goal);
-            }
-        } else {
-            return time;
-        }*/
     }
 
     public static long minTime(long[] machines, long goal) {
         long maxValue = Arrays.stream(machines).max().getAsLong();
-        return binarySearchTime(0, (goal / (long) machines.length) * maxValue, machines, goal);
+        long min = 0L;
+        long max = goal <= machines.length ? 1 * maxValue : (goal / (long) machines.length) * maxValue;
+        return binarySearchTime(min, max, machines, goal);
     }
 
     private static int binarySearchIndex(Integer[] a, int item) {
