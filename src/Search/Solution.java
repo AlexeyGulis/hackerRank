@@ -18,6 +18,11 @@ import static java.util.stream.Collectors.toList;
 
 class Result {
 
+    public static long maximumSum(List<Long> a, long m) {
+        // Write your code here
+        return 0L;
+    }
+
     private static long checkResult(long time, long[] machines) {
         long result = 0L;
         for (int i = 0; i < machines.length; i++) {
