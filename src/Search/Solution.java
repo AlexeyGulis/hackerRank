@@ -190,25 +190,27 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] nGoal = scanner.nextLine().split(" ");
+        int q = Integer.parseInt(bufferedReader.readLine().trim());
 
-        int n = Integer.parseInt(nGoal[0]);
+        IntStream.range(0, q).forEach(qItr -> {
+            try {
+                String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
 
-        long goal = Long.parseLong(nGoal[1]);
+                int n = Integer.parseInt(firstMultipleInput[0]);
 
-        long[] machines = new long[n];
+                long m = Long.parseLong(firstMultipleInput[1]);
 
-        String[] machinesItems = scanner.nextLine().split(" ");
-        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+                List<Long> a = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                        .map(Long::parseLong)
+                        .collect(toList());
 
-        for (int i = 0; i < n; i++) {
-            long machinesItem = Long.parseLong(machinesItems[i]);
-            machines[i] = machinesItem;
-        }
+                long result = Result.maximumSum(a, m);
+                System.out.println(result);
 
-        long ans = Result.minTime(machines, goal);
-
-        System.out.println(ans);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         bufferedReader.close();
     }
