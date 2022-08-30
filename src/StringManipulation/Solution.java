@@ -1,7 +1,5 @@
 package StringManipulation;
 
-import edu.princeton.cs.algs4.In;
-
 import javax.swing.plaf.basic.BasicColorChooserUI;
 import java.io.*;
 import java.math.*;
@@ -26,131 +24,6 @@ class Result {
      *  1. STRING a
      *  2. STRING b
      */
-
-    public static int commonChild(String s1, String s2) {
-        // Write your code here
-        int[][] C = new int[s1.length() + 1][s2.length() + 1];
-        for (int i = 0; i < s1.length(); i++) {
-            for (int j = 0; j < s2.length(); j++) {
-                if (s1.charAt(i) == s2.charAt(j)) {
-                    C[i + 1][j + 1] = C[i][j] + 1;
-                } else {
-                    C[i + 1][j + 1] = C[i + 1][j] > C[i][j + 1] ? C[i + 1][j] : C[i][j + 1];
-                }
-            }
-        }
-        return C[s1.length()][s2.length()];
-    }
-
-    private static class SubstringNode {
-        private StringBuilder s = new StringBuilder();
-        private int index = 0;
-        private boolean flag = true;
-
-        public SubstringNode() {
-        }
-
-        public StringBuilder getS() {
-            return s;
-        }
-
-        public void setS(StringBuilder s) {
-            this.s = s;
-        }
-
-        public int getIndex() {
-            return index;
-        }
-
-        public void setIndex(int index) {
-            this.index = index;
-        }
-
-        public boolean isFlag() {
-            return flag;
-        }
-
-        public void setFlag(boolean flag) {
-            this.flag = flag;
-        }
-    }
-
-    public static long substrCount(int n, String s) {
-        long result = 0L;
-        SubstringNode[] substings = new SubstringNode[255];
-        for (int i = 0; i < 255; i++) {
-            substings[i] = new SubstringNode();
-        }
-        char[] string = s.toCharArray();
-        for (int i = 0; i < string.length; i++) {
-            for (int j = 0; j < substings.length; j++) {
-                StringBuilder str = substings[j].getS();
-                if (str.length() != 0 && substings[j].isFlag()) {
-                    if (substings[j].getIndex() != 0) {
-                        if (str.charAt(0) == string[i]) {
-                            str.append(string[i]);
-                            substings[j].setS(str);
-                            result++;
-                            int index = substings[j].getIndex();
-                            if ((str.length() - 1) / 2 == index) {
-                                substings[j] = new SubstringNode();
-                                StringBuilder temp = new StringBuilder();
-                                for (int k = index + 1; k < str.length(); k++) {
-                                    temp.append(str.charAt(k));
-                                }
-                                substings[j].setS(temp);
-                            }
-                            if (i == n - 1) {
-                                result += (str.length() - index - 1) * (str.length() - index - 2) / 2;
-                            }
-                        } else {
-                            int ind = substings[j].getIndex();
-                            if (ind < str.length() - 1) {
-                                substings[j] = new SubstringNode();
-                                StringBuilder temp = new StringBuilder();
-                                for (int k = ind + 1; k < str.length(); k++) {
-                                    temp.append(str.charAt(k));
-                                }
-                                result += (temp.length() - 1) * temp.length() / 2;
-                                temp.append(string[i]);
-                                substings[j].setS(temp);
-                                substings[j].setIndex(temp.length() - 1);
-                            } else {
-                                substings[j].setFlag(false);
-                            }
-
-                        }
-                    } else {
-                        if (str.charAt(str.length() - 1) != string[i]) {
-                            result += (str.length() - 1) * str.length() / 2;
-                            substings[j].setIndex(str.length());
-                            str.append(string[i]);
-                            substings[j].setS(str);
-                        } else {
-                            str.append(string[i]);
-                            substings[j].setS(str);
-                            if (i == n - 1) {
-                                result += (str.length() - 1) * str.length() / 2;
-                            }
-                        }
-
-                    }
-                }
-            }
-            if (substings[string[i]].getS().length() == 0) {
-                substings[string[i]].setS(new StringBuilder().append(string[i]));
-            } else {
-                if (!substings[string[i]].isFlag()) {
-                    substings[string[i]] = new SubstringNode();
-                    substings[string[i]].setS(new StringBuilder().append(string[i]));
-                }
-            }
-
-        }
-        result += n;
-        return result;
-    }
-
     public static String isValid(String s) {
         HashMap<Character, Integer> countLetters = new HashMap<>();
         char[] charS = s.toCharArray();
@@ -176,13 +49,13 @@ class Result {
                 minLetter = ascii.getKey();
             }
             if (max - ascii.getValue() > 1) {
-                if (ascii.getValue() == 1) {
+                if(ascii.getValue() == 1){
                     if (flag) {
                         flag = false;
                     } else {
                         return "NO";
                     }
-                } else {
+                }else{
                     return "NO";
                 }
             }
@@ -248,14 +121,13 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        String s1 = bufferedReader.readLine();
+        String s = bufferedReader.readLine();
 
-        String s2 = bufferedReader.readLine();
-
-        int result = Result.commonChild(s1, s2);
+        String result = Result.isValid(s);
 
         System.out.println(result);
 
         bufferedReader.close();
+
     }
 }

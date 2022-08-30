@@ -1,7 +1,6 @@
 package Search;
 
 import com.sun.source.tree.BinaryTree;
-import edu.princeton.cs.algs4.In;
 
 import java.io.*;
 import java.math.*;
@@ -18,8 +17,67 @@ import static java.util.stream.Collectors.toList;
 
 class Result {
 
+    public static long minimumPasses(long m, long w, long p, long n) {
+        // Write your code here
+        long candy = 0L;
+        long countDays = 0L;
+        long produtcion = 0L;
+        long canBuy = 0L;
+        if (n / m <= w) return 1;
+        long daysRemaining = n % (m * w) == 0 ? n / (m * w) : (n / (m * w)) + 1;
+        while (countDays <= daysRemaining) {
+            produtcion = m * w;
+            canBuy = (produtcion + candy) / p;
+            if (produtcion + candy < n && canBuy > 0) {
+                long v = Math.abs(m - w);
+                if (canBuy > v) {
+                    m = Math.max(m, w);
+                    m = ((canBuy - v) % 2) == 1
+                            ? m + ((canBuy - v) / 2) + 1
+                            : m + ((canBuy - v) / 2);
+                    w = ((canBuy - v) % 2) == 1
+                            ? m - 1
+                            : m;
+                } else {
+                    if (m > w) {
+                        w += canBuy;
+                    } else {
+                        m += canBuy;
+                    }
+                }
+                produtcion -= canBuy * p;
+            }
+            candy += produtcion;
+            countDays++;
+            daysRemaining = Math.min(daysRemaining,
+                    countDays + (((n - candy) % (m * w)) == 0
+                            ? ((n - candy) / (m * w))
+                            : ((n - candy) / (m * w)) + 1));
+        }
+        return Math.min(countDays, daysRemaining);
+    }
+
+    private static int indexSearch(List<Long> a, long m) {
+        int low = 0;
+        int high = a.size() - 1;
+        while (low + 1 < high) {
+            int mid = low + ((high - low) >>> 1);
+            Long key = a.get(mid);
+            if (key.compareTo(m) < 0) {
+                low = mid;
+            } else if (key.compareTo(m) >= 0) {
+                high = mid;
+            }
+        }
+        return low;
+    }
+
     public static long maximumSum(List<Long> a, long m) {
         // Write your code here
+        long result = Long.MAX_VALUE;
+        Collections.sort(a);
+        int index = indexSearch(a, m);
+        System.out.println(index);
         return 0L;
     }
 
@@ -190,27 +248,19 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        int q = Integer.parseInt(bufferedReader.readLine().trim());
+        String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
 
-        IntStream.range(0, q).forEach(qItr -> {
-            try {
-                String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+        long m = Long.parseLong(firstMultipleInput[0]);
 
-                int n = Integer.parseInt(firstMultipleInput[0]);
+        long w = Long.parseLong(firstMultipleInput[1]);
 
-                long m = Long.parseLong(firstMultipleInput[1]);
+        long p = Long.parseLong(firstMultipleInput[2]);
 
-                List<Long> a = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-                        .map(Long::parseLong)
-                        .collect(toList());
+        long n = Long.parseLong(firstMultipleInput[3]);
 
-                long result = Result.maximumSum(a, m);
-                System.out.println(result);
+        long result = Result.minimumPasses(m, w, p, n);
 
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
+        System.out.println(result);
 
         bufferedReader.close();
     }

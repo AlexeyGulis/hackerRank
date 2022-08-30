@@ -1,7 +1,5 @@
 package GreedyAlgorithms;
 
-import edu.princeton.cs.algs4.In;
-
 import java.io.*;
 import java.math.*;
 import java.security.*;
