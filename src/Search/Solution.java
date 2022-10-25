@@ -30,7 +30,7 @@ class Result {
             production = m * w;
             if (candy + production < p) {
                 countDays = countDays + ((p - candy) / production) - 1;
-                candy += (m * w) * ((p - candy) / production) - (m * w) ;
+                candy += (m * w) * ((p - candy) / production) - (m * w);
             }
             canBuy = (production + candy) / p;
             if (production + candy < n && canBuy > 0) {
@@ -79,11 +79,27 @@ class Result {
 
     public static long maximumSum(List<Long> a, long m) {
         // Write your code here
-        long result = Long.MAX_VALUE;
-        Collections.sort(a);
-        int index = indexSearch(a, m);
-        System.out.println(index);
-        return 0L;
+        long res = 0L;
+        List<Long> prefixSum = new ArrayList<>();
+        TreeSet<Long> prefixSort = new TreeSet<>();
+        long curr = 0;
+        for (int i = 0; i < a.size(); i++) {
+            curr = (a.get(i) % m + curr) % m;
+            prefixSum.add(curr);
+
+        }
+        prefixSort.add(prefixSum.get(0));
+        res = Math.max(res, prefixSum.get(0));
+        for (int i = 1; i < a.size(); i++) {
+            Long p = prefixSort.ceiling(prefixSum.get(i));
+            if (p != null) {
+                res = Math.max(res, (prefixSum.get(i) - p + m) % m);
+            }
+            res = Math.max(res, prefixSum.get(i));
+            prefixSort.add(prefixSum.get(i));
+        }
+        res = Math.max(res, (prefixSort.last() - prefixSort.first() + m) % m);
+        return res;
     }
 
     private static long checkResult(long time, long[] machines) {
@@ -253,19 +269,27 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+        int q = Integer.parseInt(bufferedReader.readLine().trim());
 
-        long m = Long.parseLong(firstMultipleInput[0]);
+        IntStream.range(0, q).forEach(qItr -> {
+            try {
+                String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
 
-        long w = Long.parseLong(firstMultipleInput[1]);
+                int n = Integer.parseInt(firstMultipleInput[0]);
 
-        long p = Long.parseLong(firstMultipleInput[2]);
+                long m = Long.parseLong(firstMultipleInput[1]);
 
-        long n = Long.parseLong(firstMultipleInput[3]);
+                List<Long> a = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                        .map(Long::parseLong)
+                        .collect(toList());
 
-        long result = Result.minimumPasses(m, w, p, n);
+                long result = Result.maximumSum(a, m);
+                System.out.println(result);
 
-        System.out.println(result);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         bufferedReader.close();
     }
