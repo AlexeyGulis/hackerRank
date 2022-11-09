@@ -32,6 +32,11 @@ class Result {
         return arr.get(arr.size() - 1);
     }
 
+    public static String abbreviation(String a, String b) {
+        // Write your code here
+        return "NO";
+    }
+
 }
 
 public class Solution {
@@ -44,9 +49,21 @@ public class Solution {
                 .map(Integer::parseInt)
                 .collect(toList());
 
-        int res = Result.maxSubsetSum(arr);
+        int q = Integer.parseInt(bufferedReader.readLine().trim());
 
-        System.out.println(res);
+        IntStream.range(0, q).forEach(qItr -> {
+            try {
+                String a = bufferedReader.readLine();
+
+                String b = bufferedReader.readLine();
+
+                String result = Result.abbreviation(a, b);
+
+                System.out.println(result);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         bufferedReader.close();
     }
