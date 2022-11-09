@@ -20,30 +20,16 @@ class Result {
      * The function is expected to return an INTEGER.
      * The function accepts INTEGER_ARRAY arr as parameter.
      */
-    private static int max = 0;
 
     public static int maxSubsetSum(List<Integer> arr) {
-        for (int i = 0; i < arr.size(); i++) {
-            recurs(i + 2, arr.get(i), arr);
+        if(arr.size() == 0) return 0;
+        if(arr.size() == 1) return Math.max(0,arr.get(0));
+        arr.set(0, Math.max(arr.get(0), 0));
+        arr.set(1, Math.max(arr.get(1), arr.get(0)));
+        for (int i = 2; i < arr.size(); i++) {
+            arr.set(i,Math.max(arr.get(i-2) + arr.get(i), arr.get(i-1)));
         }
-        return max < 0 ? 0 : max;
-    }
-
-    private static void recurs(int i, int temp, List<Integer> arr) {
-        if (i >= arr.size()) {
-            if (temp > max) {
-                max = temp;
-            }
-            return;
-        }
-        temp += arr.get(i);
-        if (temp > max) {
-            max = temp;
-        }
-        recurs(i + 2, temp, arr);
-        for (int j = i + 1; j < arr.size(); j++) {
-            recurs(j, temp - arr.get(i), arr);
-        }
+        return arr.get(arr.size() - 1);
     }
 
 }
