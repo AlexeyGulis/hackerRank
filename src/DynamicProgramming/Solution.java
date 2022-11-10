@@ -22,18 +22,35 @@ class Result {
      */
 
     public static int maxSubsetSum(List<Integer> arr) {
-        if(arr.size() == 0) return 0;
-        if(arr.size() == 1) return Math.max(0,arr.get(0));
+        if (arr.size() == 0) return 0;
+        if (arr.size() == 1) return Math.max(0, arr.get(0));
         arr.set(0, Math.max(arr.get(0), 0));
         arr.set(1, Math.max(arr.get(1), arr.get(0)));
         for (int i = 2; i < arr.size(); i++) {
-            arr.set(i,Math.max(arr.get(i-2) + arr.get(i), arr.get(i-1)));
+            arr.set(i, Math.max(arr.get(i - 2) + arr.get(i), arr.get(i - 1)));
         }
         return arr.get(arr.size() - 1);
     }
 
     public static String abbreviation(String a, String b) {
         // Write your code here
+        if (b.length() > a.length()) {
+            return "NO";
+        }
+        char[] c = b.toCharArray();
+        char[] d = a.toCharArray();
+        int lastUpperLetter = -1;
+        int[][] t = new int[255][2];
+        int j = 0;
+        for (int i = 0; i < a.length(); i++) {
+            if (c[j] == d[i]) {
+                lastUpperLetter = j;
+                j++;
+            }
+            if(c[j] == Character.toUpperCase(d[i])){
+
+            }
+        }
         return "NO";
     }
 
@@ -42,12 +59,6 @@ class Result {
 public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-
-        int n = Integer.parseInt(bufferedReader.readLine().trim());
-
-        List<Integer> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-                .map(Integer::parseInt)
-                .collect(toList());
 
         int q = Integer.parseInt(bufferedReader.readLine().trim());
 
