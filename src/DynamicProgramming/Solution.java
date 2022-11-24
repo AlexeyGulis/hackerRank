@@ -37,21 +37,20 @@ class Result {
         if (b.length() > a.length()) {
             return "NO";
         }
-        char[] c = b.toCharArray();
-        char[] d = a.toCharArray();
-        int lastUpperLetter = -1;
-        int[][] t = new int[255][2];
-        int j = 0;
-        for (int i = 0; i < a.length(); i++) {
-            if (c[j] == d[i]) {
-                lastUpperLetter = j;
-                j++;
-            }
-            if(c[j] == Character.toUpperCase(d[i])){
-
+        char[] c = a.toCharArray();
+        char[] d = b.toCharArray();
+        boolean[][] f = new boolean[c.length + 1][d.length + 1];
+        f[0][0] = true;
+        for (int i = 1; i < f.length; i++) {
+            f[i][0] = f[i-1][0] && Character.isLowerCase(c[i-1]);
+        }
+        for (int i = 1; i < c.length + 1; i++) {
+            for (int j = 1; j < d.length + 1; j++) {
+                f[i][j] = (f[i-1][j-1] && Character.toUpperCase(c[i-1]) == d[j-1]) ||
+                        (f[i-1][j] && Character.isLowerCase(c[i-1]));
             }
         }
-        return "NO";
+        return f[a.length()][b.length()] ? "YES" : "NO";
     }
 
 }
