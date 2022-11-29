@@ -25,31 +25,31 @@ class Result {
         long candiesPerChild = 0L;
         boolean decrease = false;
         int lastGrowIndex = 0;
-        long mark = 0L;
+        long lastGrowMarkCandies = 0L;
         for (int i = 0; i < n; i++) {
             if (i == 0) {
                 candiesPerChild++;
-                mark = candiesPerChild;
+                lastGrowMarkCandies = candiesPerChild;
                 lastGrowIndex = i;
             } else {
                 if (arr.get(i - 1) < arr.get(i)) {
                     lastGrowIndex = i;
                     candiesPerChild++;
-                    mark = candiesPerChild;
+                    lastGrowMarkCandies = candiesPerChild;
                     decrease = false;
                 } else if (arr.get(i - 1) > arr.get(i)) {
                     if (!decrease) {
                         if (candiesPerChild == 1) {
-                            mark++;
+                            lastGrowMarkCandies++;
                             ans++;
                         } else {
                             candiesPerChild = 1;
                         }
                         decrease = true;
                     } else {
-                        if (i - lastGrowIndex == mark) {
+                        if (i - lastGrowIndex == lastGrowMarkCandies) {
                             ans += i - lastGrowIndex;
-                            mark++;
+                            lastGrowMarkCandies++;
                         } else {
                             ans += i - lastGrowIndex - 1;
                         }
@@ -57,7 +57,7 @@ class Result {
                 } else {
                     candiesPerChild = 1;
                     lastGrowIndex = i;
-                    mark = candiesPerChild;
+                    lastGrowMarkCandies = candiesPerChild;
                     decrease = false;
                 }
             }
