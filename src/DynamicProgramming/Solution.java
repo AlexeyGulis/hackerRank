@@ -20,6 +20,46 @@ class Result {
      * The function is expected to return an INTEGER.
      * The function accepts INTEGER_ARRAY arr as parameter.
      */
+    static List<Result.Decibinary> d;
+    static Map<Integer, Integer> t;
+    public static class Decibinary implements Comparable {
+        public long decibinary;
+        public long decimal;
+
+        public Decibinary(long decibinary) {
+            this.decibinary = decibinary;
+            int i = 0;
+            while (decibinary > 0) {
+                decimal += decibinary % 10 * Math.pow(2, i);
+                decibinary /= 10;
+                i++;
+            }
+        }
+
+        @Override
+        public int compareTo(Object o) {
+            Decibinary that = (Decibinary) o;
+            if (decimal == that.decimal) {
+                if (decibinary > that.decibinary) {
+                    return 1;
+                } else if (decibinary < that.decibinary) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            } else if (decimal < that.decimal) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+    }
+
+
+    public static long decibinaryNumbers(long x) {
+        return d.get((int) x - 1).decibinary;
+    }
+
     public static long candies(int n, List<Integer> arr) {
         long ans = 0L;
         long candiesPerChild = 0L;
@@ -104,22 +144,25 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = Integer.parseInt(bufferedReader.readLine().trim());
+        Result.d = new ArrayList<>();
+        for (int i = 0; i < 1000000; i++) {
+            Result.d.add(new Result.Decibinary(i));
+        }
+        Collections.sort(Result.d);
 
-        List<Integer> arr = IntStream.range(0, n).mapToObj(i -> {
-                    try {
-                        return bufferedReader.readLine().replaceAll("\\s+$", "");
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                })
-                .map(String::trim)
-                .map(Integer::parseInt)
-                .collect(toList());
+        int q = Integer.parseInt(bufferedReader.readLine().trim());
 
-        long result = Result.candies(n, arr);
+        IntStream.range(0, q).forEach(qItr -> {
+            try {
+                long x = Long.parseLong(bufferedReader.readLine().trim());
 
-        System.out.println(result);
+                long result = Result.decibinaryNumbers(x);
+
+                System.out.println(result);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         bufferedReader.close();
     }
