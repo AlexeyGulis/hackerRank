@@ -20,44 +20,11 @@ class Result {
      * The function is expected to return an INTEGER.
      * The function accepts INTEGER_ARRAY arr as parameter.
      */
-    static List<Result.Decibinary> d;
-    static Map<Integer, Integer> t;
-    public static class Decibinary implements Comparable {
-        public long decibinary;
-        public long decimal;
-
-        public Decibinary(long decibinary) {
-            this.decibinary = decibinary;
-            int i = 0;
-            while (decibinary > 0) {
-                decimal += decibinary % 10 * Math.pow(2, i);
-                decibinary /= 10;
-                i++;
-            }
-        }
-
-        @Override
-        public int compareTo(Object o) {
-            Decibinary that = (Decibinary) o;
-            if (decimal == that.decimal) {
-                if (decibinary > that.decibinary) {
-                    return 1;
-                } else if (decibinary < that.decibinary) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            } else if (decimal < that.decimal) {
-                return -1;
-            } else {
-                return 1;
-            }
-        }
-    }
+    static Map<Long, Integer> count;
 
 
     public static long decibinaryNumbers(long x) {
-        return d.get((int) x - 1).decibinary;
+        return 0;
     }
 
     public static long candies(int n, List<Integer> arr) {
@@ -144,11 +111,20 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        Result.d = new ArrayList<>();
-        for (int i = 0; i < 1000000; i++) {
-            Result.d.add(new Result.Decibinary(i));
+        int maxDec = 15;
+        int power = 4;
+        int decimal = 10;
+        long [][] pre = new long[maxDec][power];
+        for (int i = 0; i < maxDec; i++) {
+            pre[i][0]  = i < maxDec ? 1 : 0;
+            for (int j = 1; j < power; j++) {
+                for (int k = 0; k < decimal; k++) {
+                    int value = i - k * (1<<j);
+                    if(value < 0) break;
+                    pre[i][j] += pre[value][j - 1];
+                }
+            }
         }
-        Collections.sort(Result.d);
 
         int q = Integer.parseInt(bufferedReader.readLine().trim());
 
